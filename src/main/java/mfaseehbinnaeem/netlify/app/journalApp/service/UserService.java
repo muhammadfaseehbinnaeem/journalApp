@@ -5,13 +5,13 @@ import mfaseehbinnaeem.netlify.app.journalApp.repository.UserRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
@@ -20,8 +20,10 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public void saveNewUser(User user) {
+        user.setEmail((user.getEmail() != null && !user.getEmail().isEmpty()) ? user.getEmail() : (user.getUsername() + "@yopmail.com"));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Arrays.asList("USER"));
+        user.setSentimentAnalysis(user.isSentimentAnalysis());
         userRepository.save(user);
     }
 

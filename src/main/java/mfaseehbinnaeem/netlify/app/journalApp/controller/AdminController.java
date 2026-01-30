@@ -1,5 +1,6 @@
 package mfaseehbinnaeem.netlify.app.journalApp.controller;
 
+import mfaseehbinnaeem.netlify.app.journalApp.cache.AppCache;
 import mfaseehbinnaeem.netlify.app.journalApp.entity.User;
 import mfaseehbinnaeem.netlify.app.journalApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ import java.util.List;
 public class AdminController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AppCache appCache;
 
     @PostMapping("createAdminUser")
     public ResponseEntity<User> createAdminUser(@RequestBody User user) {
@@ -35,5 +39,10 @@ public class AdminController {
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/clearAppCache")
+    public void clearAppCache() {
+        appCache.init();
     }
 }

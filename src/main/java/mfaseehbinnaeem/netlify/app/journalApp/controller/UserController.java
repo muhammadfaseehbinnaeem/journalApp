@@ -1,8 +1,9 @@
 package mfaseehbinnaeem.netlify.app.journalApp.controller;
 
+import mfaseehbinnaeem.netlify.app.journalApp.api.response.WeatherResponse;
 import mfaseehbinnaeem.netlify.app.journalApp.entity.User;
 import mfaseehbinnaeem.netlify.app.journalApp.service.UserService;
-import org.bson.types.ObjectId;
+import mfaseehbinnaeem.netlify.app.journalApp.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,24 +11,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/id/{userId}")
-    public User getUserById(@PathVariable ObjectId userId) {
-        Optional<User> user = userService.findById(userId);
-
-        if (user.isPresent()) {
-            return user.get();
-        }
-
-        return null;
-    }
+    @Autowired
+    private WeatherService weatherService;
 
     @PutMapping
     public ResponseEntity<User> updateUser(@RequestBody User user) {
@@ -50,5 +41,18 @@ public class UserController {
         userService.deleteByUsername(username);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping
+    public ResponseEntity<String> greeting() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        WeatherResponse weatherResponse = weatherService.getWeather("Islamabad");
+        String greeting = "Hi " + authentication.getName();
+
+        if (weatherResponse != null) {
+            greeting = "Hi " + authentication.getName() + "! Weather feels like " + weatherResponse.getCurrent().getFeelslike() + ".";
+        }
+
+        return new ResponseEntity<>(greeting, HttpStatus.OK);
     }
 }
