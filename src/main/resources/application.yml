@@ -1,0 +1,31 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://journalapp_user:journalapp@journalapp.8yviwx3.mongodb.net/
+      database: journalapp
+      auto-index-creation: true
+    redis:
+      host: redis-16058.c74.us-east-1-4.ec2.cloud.redislabs.com
+      port: 16058
+      password: journalapp
+  main:
+    allow-circular-references: true
+    allow-bean-definition-overriding: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: faseeh@volmatica.com
+    password: xdfg mbqc pxcw ckja
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+server:
+  port: 8080
+
+weather:
+  api:
+    key: 5227464802315bf967ce159c63ecd064
